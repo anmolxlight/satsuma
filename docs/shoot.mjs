@@ -20,6 +20,7 @@ const send = (method, params = {}) => new Promise((r) => { pending[++id] = r; ws
 await send("Emulation.setDeviceMetricsOverride", { width: +W, height: +H, deviceScaleFactor: 1, mobile: false });
 await send("Page.navigate", { url });
 await sleep(+wait);
+if (process.env.EVAL) { await send("Runtime.evaluate", { expression: process.env.EVAL }); await sleep(600); }
 const shot = await send("Page.captureScreenshot", { format: "png" });
 (await import("node:fs")).writeFileSync(out, Buffer.from(shot.result.data, "base64"));
 ws.close(); p.kill();
