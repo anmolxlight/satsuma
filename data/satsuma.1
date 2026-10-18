@@ -1,0 +1,43 @@
+.TH SATSUMA 1 "October 2026" "satsuma 0.1.0" "User Commands"
+.SH NAME
+satsuma \- zero-click offline file converter
+.SH SYNOPSIS
+.B satsuma
+[\fIFILE\fR...]
+.br
+.B satsuma \-\-popup
+\fIFILE\fR...
+.br
+.B satsuma \-\-convert
+\fIFILE FORMAT\fR
+.br
+.B satsuma \-\-tool
+\fITOOL FILE\fR... [\fIkey=value\fR...]
+.br
+.B satsuma \-\-list
+\fIFILE\fR
+.SH DESCRIPTION
+Satsuma converts images, audio, video, PDFs, documents, slides, spreadsheets, subtitles and
+archives locally using ffmpeg, ImageMagick, poppler, pandoc and LibreOffice. Results are written
+next to the source file and never overwrite anything.
+.SH OPTIONS
+.TP
+.B \-\-popup
+Open a borderless wheel at the mouse pointer (used by file manager integrations).
+.TP
+.BI \-\-wheel " convert|tools|actions"
+Wheel to show first.
+.TP
+.BI \-\-convert " FILE FORMAT"
+Convert without a window and print the output path.
+.TP
+.BI \-\-tool " TOOL FILE..."
+Run a file tool, e.g. \fBsatsuma \-\-tool trim clip.mp4 start=0:05 end=0:10\fR.
+.TP
+.BI \-\-list " FILE"
+Show the conversions and tools available for a file.
+.TP
+.B \-\-version
+Print the version.
+.SH FILES
+~/.config/satsuma/config.json, ~/.cache/satsuma/satsuma.log

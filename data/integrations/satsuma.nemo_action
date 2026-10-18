@@ -1,0 +1,8 @@
+[Nemo Action]
+Name=Satsuma…
+Comment=Convert, tools and actions for the selection
+Exec=satsuma --popup %F
+Icon-Name=io.github.anmolxlight.Satsuma
+Selection=notnone
+Extensions=any;
+Quote=double

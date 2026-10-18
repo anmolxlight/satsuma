@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+MimeType=all/all;
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+Actions=satsuma
+X-KDE-Priority=TopLevel
+
+[Desktop Action satsuma]
+Name=Satsuma…
+Icon=io.github.anmolxlight.Satsuma
+Exec=satsuma --popup %F

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <title>Satsuma</title>
+  <path d="M262 92 C270 60 292 40 322 34" fill="none" stroke="#6B4A2B" stroke-width="12" stroke-linecap="round"/>
+  <path d="M276 84 C300 30 372 18 420 40 C392 92 330 112 276 84 Z" fill="#3E9B57"/>
+  <path d="M290 78 C326 60 366 50 404 46" fill="none" stroke="#2F7D45" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="256" cy="280" r="200" fill="#FD5400"/>
+  <circle cx="256" cy="280" r="176" fill="#FFE6D2"/>
+  <circle cx="256" cy="280" r="162" fill="#FF8A3D"/>
+  <g stroke="#FFE6D2" stroke-width="13" stroke-linecap="round">
+    <line x1="256" y1="280" x2="317.2" y2="132.2"/>
+    <line x1="256" y1="280" x2="403.8" y2="218.8"/>
+    <line x1="256" y1="280" x2="403.8" y2="341.2"/>
+    <line x1="256" y1="280" x2="317.2" y2="427.8"/>
+    <line x1="256" y1="280" x2="194.8" y2="427.8"/>
+    <line x1="256" y1="280" x2="108.2" y2="341.2"/>
+    <line x1="256" y1="280" x2="108.2" y2="218.8"/>
+    <line x1="256" y1="280" x2="194.8" y2="132.2"/>
+  </g>
+  <circle cx="256" cy="280" r="26" fill="#FFE6D2"/>
+</svg>

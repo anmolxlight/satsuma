@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Satsuma
+GenericName=File Converter
+Comment=Convert, compress and tidy files with one flick of a wheel, fully offline
+Exec=satsuma %F
+Icon=io.github.anmolxlight.Satsuma
+Terminal=false
+StartupNotify=true
+Categories=Utility;GTK;
+Keywords=convert;converter;compress;resize;pdf;image;video;audio;
+MimeType=image/png;image/jpeg;image/webp;image/heic;image/avif;image/tiff;image/gif;image/bmp;image/svg+xml;video/mp4;video/quicktime;video/x-matroska;video/webm;audio/mpeg;audio/flac;audio/x-wav;audio/ogg;audio/mp4;application/pdf;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.oasis.opendocument.text;text/markdown;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;text/csv;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/zip;

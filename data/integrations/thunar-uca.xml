@@ -1,0 +1,16 @@
+<action>
+	<icon>io.github.anmolxlight.Satsuma</icon>
+	<name>Satsuma…</name>
+	<submenu></submenu>
+	<unique-id>satsuma-popup</unique-id>
+	<command>satsuma --popup %F</command>
+	<description>Convert, tools and actions for the selection</description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<directories/>
+	<audio-files/>
+	<image-files/>
+	<other-files/>
+	<text-files/>
+	<video-files/>
+</action>

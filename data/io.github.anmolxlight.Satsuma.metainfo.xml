@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.anmolxlight.Satsuma</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>Satsuma</name>
+  <summary>Zero-click offline file converter</summary>
+  <developer id="io.github.anmolxlight">
+    <name>anmolxlight</name>
+  </developer>
+  <description>
+    <p>
+      Drop a file on the wheel, flick to a slice, done. Satsuma converts images, audio, video,
+      PDFs, documents, slides, spreadsheets, subtitles and archives with the tools already on
+      your computer. Nothing is uploaded, ever.
+    </p>
+    <p>Hold Shift for formats, Ctrl for file tools (compress, trim, crop, merge, split and more) and Alt for actions.</p>
+  </description>
+  <launchable type="desktop-id">io.github.anmolxlight.Satsuma.desktop</launchable>
+  <url type="homepage">https://github.com/anmolxlight/satsuma</url>
+  <url type="bugtracker">https://github.com/anmolxlight/satsuma/issues</url>
+  <screenshots>
+    <screenshot type="default">
+      <caption>The convert wheel on a PNG</caption>
+      <image>https://raw.githubusercontent.com/anmolxlight/satsuma/main/docs/screenshots/convert-wheel.png</image>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.1.0" date="2026-10-18"/>
+  </releases>
+</component>
