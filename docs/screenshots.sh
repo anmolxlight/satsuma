@@ -11,7 +11,7 @@ trap 'rm -rf "$F"' EXIT
 mkdir -p "$OUT"
 convert -size 1200x800 gradient:'#FFB37A'-'#FD5400' "$F/photo.png"
 ffmpeg -loglevel error -f lavfi -i testsrc2=d=10:s=640x360 -f lavfi -i sine=d=10 -shortest -pix_fmt yuv420p "$F/clip.mp4"
-ffmpeg -loglevel error -f lavfi -i testsrc2=d=120:s=1280x720:r=30 -f lavfi -i sine=d=120 -shortest \
+ffmpeg -loglevel error -f lavfi -i testsrc2=d=20:s=1280x720:r=30 -f lavfi -i sine=d=20 -shortest \
   -c:v libx264 -preset ultrafast -pix_fmt yuv420p "$F/long.mp4"
 export XDG_CONFIG_HOME="$F/config"   # default settings, never the user's
 
@@ -35,5 +35,6 @@ shot actions-wheel 1500 '{"mode": 2, "hover": 0}' "$F/photo.png"
 shot settings 2000 '{"settings": true}' "$F/photo.png"
 shot dark-theme 1500 '{"theme": "dark", "mode": 1, "hover": 0}' "$F/clip.mp4"
 shot progress 12000 '{"run": ["convert", "webm"]}' "$F/long.mp4"
+shot trim-prompt 1500 '{"run": ["tool", "trim"]}' "$F/clip.mp4"
 rm -f "$F"/long*.webm "$F"/.satsuma-*
 ls -la "$OUT"

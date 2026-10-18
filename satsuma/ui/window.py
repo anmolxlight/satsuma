@@ -276,6 +276,8 @@ class WheelWindow(Gtk.ApplicationWindow):
         if popup:
             self.connect("notify::is-active", self.on_active)
             self.connect("map", lambda *_: GLib.idle_add(lambda: x11_center_on_pointer(self) and False))
+            if not files:  # global shortcut: files copied in the file manager are the selection
+                GLib.idle_add(lambda: self.paste() and False)
         self.set_files(files, pinned=bool(files))
         if wheel in MODES:
             self.wheel.set_mode(MODES.index(wheel))

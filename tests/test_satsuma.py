@@ -449,7 +449,7 @@ def _():
         time.sleep(0.5)
         env = dict(os.environ, GDK_BACKEND="broadway", BROADWAY_DISPLAY=f":{n}", SATSUMA_DEMO='{"quit_after": 1}',
                    PYTHONPATH=str(ROOT))
-        for args in ([], [str(D / "a.png")], ["--popup", str(D / "v.mp4"), str(D / "w.mp4")]):
+        for args in ([], [str(D / "a.png")], ["--popup", str(D / "v.mp4"), str(D / "w.mp4")], ["--selection"]):
             t = time.time()
             r = subprocess.run([py, "-m", "satsuma", *args], env=env, capture_output=True, text=True, timeout=5)
             assert r.returncode == 0, (args, r.stderr[-2000:])
