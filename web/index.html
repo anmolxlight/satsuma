@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Satsuma: flick a file, get the format. Offline file converter for Linux</title>
   <meta name="description" content="Satsuma is a radial file converter for Linux. Drop a file on the wheel, flick to a slice, done. Images, video, audio, PDFs, documents and more, converted on your machine.">
-  <meta name="theme-color" content="#0B0B0D">
+  <meta name="theme-color" content="#fafafa">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon-48.png" sizes="48x48" type="image/png">
   <meta property="og:title" content="Satsuma: flick a file, get the format">
@@ -32,8 +32,7 @@
       <div class="hero-copy">
         <p class="eyebrow">For Linux · Free and open source</p>
         <h1>Flick a file.<br><span class="accent">Get the format.</span></h1>
-        <p class="lede">Satsuma is a wheel that lives where your files are. Drop anything on it, flick to a slice,
-          and the result appears right next to the original. No uploads, no accounts, no progress bars in a browser tab.</p>
+        <p class="lede">Satsuma is a wheel that lives where your files are. Drop anything on it, flick to a slice, and the result appears right next to the original. No uploads, no accounts, no progress bars in a browser tab.</p>
         <div class="cta">
           <a class="btn" href="#install">Install Satsuma</a>
           <a class="btn ghost" href="https://github.com/anmolxlight/satsuma">View the source</a>
@@ -41,22 +40,39 @@
         <p class="fine">Ubuntu, Debian, Fedora, Arch · X11 and Wayland · x86_64 and ARM</p>
       </div>
 
-      <div class="demo" aria-label="Interactive demo">
-        <div class="files" role="group" aria-label="Sample files: drag one onto the wheel, or press Enter">
-          <button class="file" draggable="true" data-file="holiday.png">holiday.png</button>
-          <button class="file" draggable="true" data-file="interview.mp4">interview.mp4</button>
-          <button class="file" draggable="true" data-file="q3-report.pdf">q3-report.pdf</button>
-        </div>
-        <div class="card">
-          <div class="keys" role="group" aria-label="Wheels">
-            <button class="key on" data-mode="0" aria-pressed="true"><span>⇧</span>shift</button>
-            <button class="key" data-mode="1" aria-pressed="false"><span>⌃</span>ctrl</button>
-            <button class="key" data-mode="2" aria-pressed="false"><span>⌥</span>alt</button>
-          </div>
-          <p class="mode-caption" id="mode-caption">Convert formats</p>
-          <svg id="wheel" viewBox="0 0 400 400" role="listbox" tabindex="0"
-               aria-label="Wheel. Arrow keys pick a slice, Enter applies, Tab or the keys above switch wheels."></svg>
-          <p class="caption" id="caption" aria-live="polite">Drag a sample file onto the wheel</p>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="wheel-demo" role="img" aria-label="Satsuma wheel demo showing Convert formats for a PNG file">
+          <svg viewBox="0 0 400 400" role="presentation">
+            <defs>
+              <radialGradient id="shine" cx="200" cy="200" r="178" gradientUnits="userSpaceOnUse">
+                <stop offset="45%" stop-color="#ebecec"/>
+                <stop offset="100%" stop-color="#fbfbfb"/>
+              </radialGradient>
+            </defs>
+            <circle cx="200" cy="200" r="190" fill="#ecedeb" stroke="#dfe0dd"/>
+            <g>
+              <!-- 8 slices for PNG: JPG, WEBP, HEIC, AVIF, TIFF, GIF, PDF, ICO -->
+              <path d="M 200 22 A 178 178 0 0 1 290 84 L 244 84 A 90 90 0 0 0 200 110 Z" class="wheel-seg" fill="#fd5400" stroke="#fd5400" stroke-width="12" stroke-linejoin="round"/>
+              <path d="M 200 22 A 178 178 0 0 1 376 172 A 178 178 0 0 1 326 172 L 244 84 Z" class="wheel-seg" fill="url(#shine)" stroke="url(#shine)" stroke-width="12" stroke-linejoin="round"/>
+              <path d="M 200 22 A 178 178 0 0 1 376 228 A 178 178 0 0 1 376 172 L 244 172 A 90 90 0 0 0 200 110 Z" class="wheel-seg" fill="url(#shine)" stroke="url(#shine)" stroke-width="12" stroke-linejoin="round"/>
+              <path d="M 200 22 A 178 178 0 0 1 326 314 A 178 178 0 0 1 376 228 L 244 228 A 90 90 0 0 0 200 172 Z" class="wheel-seg" fill="url(#shine)" stroke="url(#shine)" stroke-width="12" stroke-linejoin="round"/>
+              <path d="M 200 22 A 178 178 0 0 1 200 378 A 178 178 0 0 1 326 314 L 200 228 A 90 90 0 0 0 200 172 Z" class="wheel-seg" fill="url(#shine)" stroke="url(#shine)" stroke-width="12" stroke-linejoin="round"/>
+              <path d="M 200 22 A 178 178 0 0 1 74 314 A 178 178 0 0 1 200 378 L 200 228 A 90 90 0 0 0 200 172 Z" class="wheel-seg" fill="url(#shine)" stroke="url(#shine)" stroke-width="12" stroke-linejoin="round"/>
+              <path d="M 200 22 A 178 178 0 0 1 24 228 A 178 178 0 0 1 74 314 L 74 228 A 90 90 0 0 0 200 172 Z" class="wheel-seg" fill="url(#shine)" stroke="url(#shine)" stroke-width="12" stroke-linejoin="round"/>
+              <path d="M 200 22 A 178 178 0 0 1 74 172 A 178 178 0 0 1 24 228 L 74 84 A 90 90 0 0 0 200 110 Z" class="wheel-seg" fill="url(#shine)" stroke="url(#shine)" stroke-width="12" stroke-linejoin="round"/>
+            </g>
+            <circle cx="200" cy="200" r="80" fill="#f6f6f5"/>
+            <rect x="156" y="182" width="88" height="36" rx="18" fill="#fff"/>
+            <text x="200" y="205" text-anchor="middle" font-size="13" fill="#141414" font-weight="500" font-family="Geist, Inter, system-ui, sans-serif">PNG</text>
+            <text x="200" y="200" text-anchor="middle" font-size="15" fill="#fff" font-weight="700" font-family="Geist, Inter, system-ui, sans-serif">JPG</text>
+            <text x="290" y="100" text-anchor="middle" font-size="13" fill="#141414" font-weight="700" font-family="Geist, Inter, system-ui, sans-serif">WEBP</text>
+            <text x="350" y="172" text-anchor="middle" font-size="13" fill="#141414" font-weight="700" font-family="Geist, Inter, system-ui, sans-serif">HEIC</text>
+            <text x="350" y="228" text-anchor="middle" font-size="13" fill="#141414" font-weight="700" font-family="Geist, Inter, system-ui, sans-serif">AVIF</text>
+            <text x="290" y="300" text-anchor="middle" font-size="13" fill="#141414" font-weight="700" font-family="Geist, Inter, system-ui, sans-serif">TIFF</text>
+            <text x="200" y="378" text-anchor="middle" font-size="13" fill="#141414" font-weight="700" font-family="Geist, Inter, system-ui, sans-serif">GIF</text>
+            <text x="110" y="300" text-anchor="middle" font-size="13" fill="#141414" font-weight="700" font-family="Geist, Inter, system-ui, sans-serif">PDF</text>
+            <text x="50" y="228" text-anchor="middle" font-size="13" fill="#141414" font-weight="700" font-family="Geist, Inter, system-ui, sans-serif">ICO</text>
+          </svg>
         </div>
       </div>
     </section>
@@ -64,59 +80,70 @@
     <section id="formats" class="section">
       <h2>Every format you actually meet</h2>
       <p class="sub">Satsuma drives the tools Linux already trusts: ffmpeg, ImageMagick, poppler, pandoc and LibreOffice. If a tool is missing, its slices simply hide until you install it.</p>
-      <div class="grid formats">
-        <article><h3>Images</h3><p>JPG, PNG, WebP, HEIC, AVIF, TIFF, GIF, BMP, SVG, ICO</p><p class="to">→ JPG · PNG · WebP · HEIC · AVIF · TIFF · GIF · PDF · ICO</p></article>
-        <article><h3>Video</h3><p>MP4, MOV, MKV, WebM, GIF, AVI, WMV, M4V</p><p class="to">→ MP4 · MOV · MKV · WebM · GIF · MP3 · M4A</p></article>
-        <article><h3>Audio</h3><p>MP3, M4A, WAV, FLAC, OGG, Opus, AIFF, WMA, AAC</p><p class="to">→ MP3 · M4A · WAV · FLAC · OGG · Opus · AIFF</p></article>
-        <article><h3>PDF</h3><p>Any PDF, every page</p><p class="to">→ DOCX · ODT · PPTX · XLSX · JPG · PNG · TXT · MD · HTML · EPUB</p></article>
-        <article><h3>Documents</h3><p>DOCX, DOC, ODT, RTF, Markdown, TXT, HTML, EPUB, Pages preview</p><p class="to">→ DOCX · ODT · PDF · MD · TXT · HTML · EPUB · RTF</p></article>
-        <article><h3>Slides</h3><p>PPTX, PPT, ODP, Keynote preview</p><p class="to">→ PDF · PPTX · ODP · a picture per slide</p></article>
-        <article><h3>Spreadsheets</h3><p>XLSX, XLS, ODS, CSV, TSV</p><p class="to">→ XLSX · ODS · CSV · TSV · PDF · HTML</p></article>
-        <article><h3>Subtitles &amp; archives</h3><p>SRT, VTT, ASS · ZIP, TAR, GZ, XZ, BZ2, 7Z, RAR</p><p class="to">→ SRT · VTT · plain text · extract to a folder</p></article>
+      <div class="formats-grid">
+        <article class="format-card"><h3>Images</h3><p class="in">JPG, PNG, WebP, HEIC, AVIF, TIFF, GIF, BMP, SVG, ICO</p><p class="out">→ <strong>JPG</strong> · <strong>PNG</strong> · <strong>WebP</strong> · <strong>HEIC</strong> · <strong>AVIF</strong> · <strong>TIFF</strong> · <strong>GIF</strong> · <strong>PDF</strong> · <strong>ICO</strong></p></article>
+        <article class="format-card"><h3>Video</h3><p class="in">MP4, MOV, MKV, WebM, GIF, AVI, WMV, M4V</p><p class="out">→ <strong>MP4</strong> · <strong>MOV</strong> · <strong>MKV</strong> · <strong>WebM</strong> · <strong>GIF</strong> · <strong>MP3</strong> · <strong>M4A</strong></p></article>
+        <article class="format-card"><h3>Audio</h3><p class="in">MP3, M4A, WAV, FLAC, OGG, Opus, AIFF, WMA, AAC</p><p class="out">→ <strong>MP3</strong> · <strong>M4A</strong> · <strong>WAV</strong> · <strong>FLAC</strong> · <strong>OGG</strong> · <strong>Opus</strong> · <strong>AIFF</strong></p></article>
+        <article class="format-card"><h3>PDF</h3><p class="in">Any PDF, every page</p><p class="out">→ <strong>DOCX</strong> · <strong>ODT</strong> · <strong>PPTX</strong> · <strong>XLSX</strong> · <strong>JPG</strong> · <strong>PNG</strong> · <strong>TXT</strong> · <strong>MD</strong> · <strong>HTML</strong> · <strong>EPUB</strong></p></article>
+        <article class="format-card"><h3>Documents</h3><p class="in">DOCX, DOC, ODT, RTF, Markdown, TXT, HTML, EPUB, Pages preview</p><p class="out">→ <strong>DOCX</strong> · <strong>ODT</strong> · <strong>PDF</strong> · <strong>MD</strong> · <strong>TXT</strong> · <strong>HTML</strong> · <strong>EPUB</strong> · <strong>RTF</strong></p></article>
+        <article class="format-card"><h3>Slides</h3><p class="in">PPTX, PPT, ODP, Keynote preview</p><p class="out">→ <strong>PDF</strong> · <strong>PPTX</strong> · <strong>ODP</strong> · a picture per slide</p></article>
+        <article class="format-card"><h3>Spreadsheets</h3><p class="in">XLSX, XLS, ODS, CSV, TSV</p><p class="out">→ <strong>XLSX</strong> · <strong>ODS</strong> · <strong>CSV</strong> · <strong>TSV</strong> · <strong>PDF</strong> · <strong>HTML</strong></p></article>
+        <article class="format-card"><h3>Subtitles & archives</h3><p class="in">SRT, VTT, ASS · ZIP, TAR, GZ, XZ, BZ2, 7Z, RAR</p><p class="out">→ <strong>SRT</strong> · <strong>VTT</strong> · plain text · extract to a folder</p></article>
       </div>
     </section>
 
     <section id="tools" class="section">
       <h2>Hold Ctrl for the toolbox</h2>
       <p class="sub">Two dozen everyday edits, each one a single slice. Prompts are tiny, prefilled and keyboard-first: Enter confirms.</p>
-      <ul class="grid tools">
-        <li><b>Compress</b> images, video, audio and PDFs</li>
-        <li><b>Resize</b> by percent or longest side</li>
-        <li><b>Crop</b> to 1:1, 16:9, 9:16 or your own ratio</li>
-        <li><b>Trim</b> audio and video to the second</li>
-        <li><b>Split</b> PDFs by pages, media into parts</li>
-        <li><b>Merge</b> PDFs, images into a PDF, clips, tracks</li>
-        <li><b>Rotate</b> and <b>flip</b></li>
-        <li><b>Grayscale</b> photos, videos and PDFs</li>
-        <li><b>Strip metadata</b> before you share</li>
-        <li><b>Extract audio</b> or <b>mute</b> a video</li>
-        <li><b>Speed</b> up or slow down</li>
-        <li><b>Video to GIF</b> with a trim</li>
-        <li><b>Normalize loudness</b></li>
-        <li><b>Fade</b> in and out</li>
-        <li><b>Frame rate</b> and <b>frame export</b></li>
-        <li><b>Encrypt</b> and <b>decrypt</b> PDFs</li>
-        <li><b>Zip</b> and <b>tar.gz</b> anything</li>
-        <li>Alt wheel: <b>copy, move, trash, show in folder, float, send</b></li>
-      </ul>
-    </section>
-
-    <section id="privacy" class="section privacy">
-      <div>
-        <h2>Your files never leave the room</h2>
-        <p class="sub">There is no server. Satsuma has no network code at all: every conversion runs on your CPU with open source tools you can inspect. Results are written next to the original, never over it, and half-finished files never appear: output is written to a hidden temp file and renamed only when complete.</p>
+      <div class="tools-grid">
+        <div class="tool-card primary"><h4>Compress</h4><p>Images, video, audio and PDFs with sensible quality presets</p></div>
+        <div class="tool-card"><h4>Resize</h4><p>By percent or longest side</p></div>
+        <div class="tool-card"><h4>Crop</h4><p>1:1, 16:9, 9:16 or your own ratio</p></div>
+        <div class="tool-card"><h4>Trim</h4><p>Audio and video to the second</p></div>
+        <div class="tool-card"><h4>Split</h4><p>PDFs by pages, media into parts</p></div>
+        <div class="tool-card"><h4>Merge</h4><p>PDFs, images→PDF, clips, tracks</p></div>
+        <div class="tool-card"><h4>Rotate & Flip</h4><p>90°, 180°, 270°; horizontal or vertical</p></div>
+        <div class="tool-card"><h4>Grayscale</h4><p>Photos, videos and PDFs</p></div>
+        <div class="tool-card"><h4>Strip metadata</h4><p>Before you share</p></div>
+        <div class="tool-card"><h4>Extract audio / Mute</h4><p>One slice each</p></div>
+        <div class="tool-card"><h4>Speed</h4><p>0.5×, 1.5×, 2×</p></div>
+        <div class="tool-card"><h4>Video to GIF</h4><p>With a trim</p></div>
+        <div class="tool-card"><h4>Normalize loudness</h4><p>EBU R128</p></div>
+        <div class="tool-card"><h4>Fade in/out</h4><p>Audio and video</p></div>
+        <div class="tool-card"><h4>Frame rate</h4><p>Reduce or export frames</p></div>
+        <div class="tool-card"><h4>Encrypt / Decrypt PDF</h4><p>Password prompt</p></div>
+        <div class="tool-card"><h4>Zip / tar.gz</h4><p>Anything</p></div>
+        <div class="tool-card"><h4>Alt wheel</h4><p>Copy, move, trash, show in folder, float, send</p></div>
       </div>
-      <ul class="checks">
-        <li>No uploads, no telemetry, no account</li>
-        <li>Works on a plane</li>
-        <li>Never overwrites: <code>photo 2.jpg</code></li>
-        <li>Cancel any time with Esc</li>
-      </ul>
     </section>
 
-    <section id="install" class="section install">
+    <section id="privacy" class="section">
+      <div class="privacy-split">
+        <div>
+          <h2>Your files never leave the room</h2>
+          <p class="sub">There is no server. Satsuma has no network code at all: every conversion runs on your CPU with open source tools you can inspect. Results are written next to the original, never over it, and half-finished files never appear: output is written to a hidden temp file and renamed only when complete.</p>
+          <ul class="privacy-checks">
+            <li>No uploads, no telemetry, no account</li>
+            <li>Works on a plane</li>
+            <li>Never overwrites: <code>photo 2.jpg</code></li>
+            <li>Cancel any time with Esc</li>
+          </ul>
+        </div>
+        <div style="background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; text-align: center;">
+          <div style="width: 100%; aspect-ratio: 1; max-width: 300px; margin: 0 auto; background: linear-gradient(135deg, var(--accent-pale), #fff7f0); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+              <circle cx="60" cy="60" r="56" stroke="#fd5400" stroke-width="4" fill="none" stroke-dasharray="352" stroke-dashoffset="0" style="stroke-linecap: round;"/>
+              <circle cx="60" cy="60" r="30" fill="#fd5400" fill-opacity="0.15"/>
+            </svg>
+          </div>
+          <p style="margin-top: 20px; color: var(--text-soft); font-size: 15px;">100% local<br>Zero network code</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="install" class="section">
       <h2>Install</h2>
-      <div class="grid two">
+      <div class="install-grid">
         <div class="panel">
           <h3>Ubuntu and Debian</h3>
           <p>Grab the package from the latest release, then:</p>
@@ -135,7 +162,7 @@
   </main>
 
   <footer class="footer">
-    <span><img src="favicon.svg" alt="" width="18" height="18"> Satsuma · MIT licensed</span>
+    <span class="brand"><img src="favicon.svg" alt="" width="18" height="18"> Satsuma · MIT licensed</span>
     <a href="https://github.com/anmolxlight/satsuma">GitHub</a>
   </footer>
   <script src="demo.js" defer></script>
