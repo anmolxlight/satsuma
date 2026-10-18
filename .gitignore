@@ -3,3 +3,4 @@ dist/
 *.pyc
 node_modules/
 .vercel/
+.ruff_cache/
