@@ -81,7 +81,7 @@ def kind(path):
 def needs(k, src, out):
     """Binaries required to turn a `src`-format file of kind `k` into `out`."""
     if k == "image":
-        dec = (f"{src.upper()} decoder",) if src in ("avif", "heic") else ()
+        dec = (f"{src.upper()} decoder",) if src in ("avif", "heic", "svg") else ()
         enc = {"heic": ("heif-enc", "HEIC encoder"), "avif": ("AVIF encoder",)}.get(out, ())
         return ("convert", *dec, *enc)
     if k in ("audio", "video"):
@@ -127,9 +127,11 @@ def missing(tools):
 
 
 # ImageMagick lists AVIF/HEIC as read+write whenever it links libheif, but the codecs are separate libheif
-# plugins (aomenc, libde265, x265...). So probe for real: encode a pixel, decode these 1x1 samples.
-CODECS = ("AVIF encoder", "AVIF decoder", "HEIC encoder", "HEIC decoder")
+# plugins (aomenc, libde265, x265...), and its SVG coder is in a separate package too. So probe for real:
+# encode a pixel, decode these 1x1 samples.
+CODECS = ("AVIF encoder", "AVIF decoder", "HEIC encoder", "HEIC decoder", "SVG decoder")
 _PROBE = {
+    "svg": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz4=",
     "avif": "AAAAHGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZgAAAOptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABwaWN0AAAAAAAAAAAAAAAAAAAA"
             "AA5waXRtAAAAAAABAAAAImlsb2MAAAAAREAAAQABAAAAAAEOAAEAAAAAAAAAHwAAACNpaW5mAAAAAAABAAAAFWluZmUCAAAAAAEA"
             "AGF2MDEAAAAAamlwcnAAAABLaXBjbwAAABNjb2xybmNseAABAA0ABoAAAAAMYXYxQ4FAbAAAAAAUaXNwZQAAAAAAAAABAAAAAQAA"
@@ -208,6 +210,7 @@ PACKAGES = {
     "AVIF decoder": ("libheif-plugin-dav1d", "libheif", "dav1d"),
     "HEIC encoder": ("libheif-plugin-x265", "libheif-freeworld", "x265"),
     "HEIC decoder": ("libheif-plugin-libde265", "libheif-freeworld", "libde265"),
+    "SVG decoder": ("libmagickcore-6.q16-7-extra", "ImageMagick-libs", "librsvg"),
     "pdftoppm": ("poppler-utils", "poppler-utils", "poppler"),
     "pdftotext": ("poppler-utils", "poppler-utils", "poppler"),
     "pdftohtml": ("poppler-utils", "poppler-utils", "poppler"),

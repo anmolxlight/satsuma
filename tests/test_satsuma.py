@@ -206,13 +206,13 @@ def _():
 def _():
     for to in ("jpg", "webp", "tiff", "gif", "pdf", "ico"):
         valid(conv("a.png", to), to)
-    valid(conv("s.svg", "png"), "png")
     valid(conv("b.jpg", "png"), "png")
     valid(conv("anim.gif", "png"), "png")
 
 
-@case("images: HEIC and AVIF in and out", needs=formats.CODECS)
+@case("images: plugin codecs (HEIC, AVIF in and out; SVG in)", needs=formats.CODECS)
 def _():
+    valid(conv("s.svg", "png"), "png")
     valid(conv(valid(conv("a.png", "heic"), "heic"), "jpg"), "jpg")
     valid(conv(valid(conv("a.png", "avif"), "avif"), "png"), "png")
 

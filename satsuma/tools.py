@@ -10,7 +10,7 @@ from pathlib import Path
 
 from . import config
 from .convert import Output, pdf_pages
-from .formats import ext, kind, missing
+from .formats import ext, kind, missing, needs
 from .jobs import SatsumaError, check, duration, ff, has_stream, probe, run
 
 
@@ -489,8 +489,9 @@ def tools_for(paths):
     if len(kinds) != 1:
         return [BY_ID["zip"]]
     k, out = kinds.pop(), []
+    undecodable = k == IMG and any(missing(needs(k, ext(p), "png")) for p in paths)  # e.g. HEIC w/o libde265
     for t in TOOLS:
-        if not (k in t.kinds or "*" in t.kinds):
+        if not (k in t.kinds or "*" in t.kinds) or (undecodable and "*" not in t.kinds):
             continue
         if t.id == "merge" and len(paths) < 2:
             continue
