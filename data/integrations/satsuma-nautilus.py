@@ -8,7 +8,7 @@ try:
     gi.require_version("Nautilus", "4.0")
 except ValueError:
     gi.require_version("Nautilus", "3.0")
-from gi.repository import GObject, Nautilus  # noqa: E402
+from gi.repository import GObject, Nautilus
 
 
 class SatsumaMenu(GObject.GObject, Nautilus.MenuProvider):

@@ -1,4 +1,5 @@
 """File tools (Ctrl wheel). Each tool takes a path (or a list for multi tools) plus prompt params."""
+import itertools
 import os
 import re
 import tarfile
@@ -199,7 +200,7 @@ def split_av(src, parts="2"):
     edges = [0.0] + [c for c in cuts if 0 < c < total] + [total]
     e = ext(src)
     with Output(src, "", " parts") as o:
-        for i, (a, b) in enumerate(zip(edges, edges[1:]), 1):
+        for i, (a, b) in enumerate(itertools.pairwise(edges), 1):
             args = vencode(src) if kind(src) == "video" else ["-vn"]
             ff(src, os.path.join(o.tmp, f"{Path(src).stem} {i}.{e}"), "-t", f"{b - a:.3f}", *args,
                pre=["-ss", f"{a:.3f}"], dur=b - a)
@@ -393,36 +394,32 @@ def _bundle_name(srcs):
 
 def zip_files(srcs):
     srcs = [srcs] if isinstance(srcs, str) else srcs
-    with Output(_bundle_name(srcs), "zip") as o:
-        with zipfile.ZipFile(o.tmp, "w", zipfile.ZIP_DEFLATED) as z:
-            for s in srcs:
-                base = os.path.dirname(os.path.abspath(s))
-                if os.path.isdir(s):
-                    for root, _, files in os.walk(s):
-                        for f in files:
-                            check()
-                            p = os.path.join(root, f)
-                            z.write(p, os.path.relpath(p, base))
-                else:
-                    z.write(s, os.path.basename(s))
+    with Output(_bundle_name(srcs), "zip") as o, zipfile.ZipFile(o.tmp, "w", zipfile.ZIP_DEFLATED) as z:
+        for s in srcs:
+            base = os.path.dirname(os.path.abspath(s))
+            if os.path.isdir(s):
+                for root, _, files in os.walk(s):
+                    for f in files:
+                        check()
+                        p = os.path.join(root, f)
+                        z.write(p, os.path.relpath(p, base))
+            else:
+                z.write(s, os.path.basename(s))
     return o.path
 
 
 def tar_gz(srcs):
     srcs = [srcs] if isinstance(srcs, str) else srcs
-    with Output(_bundle_name(srcs), "tar.gz") as o:
-        with tarfile.open(o.tmp, "w:gz") as t:
-            for s in srcs:
-                t.add(s, os.path.basename(os.path.abspath(s)))
+    with Output(_bundle_name(srcs), "tar.gz") as o, tarfile.open(o.tmp, "w:gz") as t:
+        for s in srcs:
+            t.add(s, os.path.basename(os.path.abspath(s)))
     return o.path
 
 
 def _qpdf_argfile(args):
     """Pass passwords to qpdf through a private @file, not argv (visible in ps)."""
-    f = tempfile.NamedTemporaryFile("w", delete=False, prefix="satsuma-")
-    os.chmod(f.name, 0o600)
-    f.write("\n".join(args))
-    f.close()
+    with tempfile.NamedTemporaryFile("w", delete=False, prefix="satsuma-") as f:  # mkstemp: mode 0600
+        f.write("\n".join(args))
     return f.name
 
 

@@ -1,2 +1,9 @@
 line-length = 120
 target-version = "py311"
+
+[lint]
+# gi.require_version() must run before `from gi.repository import ...`; those lines carry `noqa: E402`.
+# Selecting E402 keeps the noqa meaningful on ruff versions whose default set leaves it out.
+extend-select = ["E402"]
+# jobs.log is the app logger: log.exception() in a catch-all handler is a deliberate log, not a swallow.
+logger-objects = ["satsuma.jobs.log"]

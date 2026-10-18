@@ -40,14 +40,14 @@ def move(paths, dest):
 def show_in_folder(paths):
     """Open the file manager with the files selected; plain folder open as a fallback."""
     uris = [f"file://{quote(os.path.abspath(p))}" for p in paths]
+    from gi.repository import Gio, GLib
     try:
-        from gi.repository import Gio, GLib
         bus = Gio.bus_get_sync(Gio.BusType.SESSION)
         bus.call_sync("org.freedesktop.FileManager1", "/org/freedesktop/FileManager1",
                       "org.freedesktop.FileManager1", "ShowItems", GLib.Variant("(ass)", (uris, "")),
                       None, Gio.DBusCallFlags.NONE, 3000)
         return
-    except Exception:
+    except GLib.Error:  # no FileManager1 service
         pass
     folder = paths[0] if os.path.isdir(paths[0]) and len(paths) == 1 else os.path.dirname(os.path.abspath(paths[0]))
     subprocess.Popen(["xdg-open", folder], start_new_session=True)
@@ -81,7 +81,8 @@ def send(paths):
     if s == "localsend":
         subprocess.Popen([shutil.which("localsend") or "localsend_app", *paths], start_new_session=True)
     elif s == "kdeconnect":
-        dev = subprocess.run(["kdeconnect-cli", "-a", "--id-only"], capture_output=True, text=True).stdout.split()
+        dev = subprocess.run(["kdeconnect-cli", "-a", "--id-only"], capture_output=True, text=True,
+                             check=False).stdout.split()
         if not dev:
             raise RuntimeError("No paired KDE Connect device is reachable")
         for p in paths:

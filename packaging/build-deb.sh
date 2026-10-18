@@ -70,7 +70,7 @@ Architecture: all
 Maintainer: anmolxlight <anmolxlight@gmail.com>
 Installed-Size: $SIZE
 Depends: python3 (>= 3.11), python3-gi, python3-gi-cairo, gir1.2-gtk-4.0, ffmpeg, imagemagick, poppler-utils, pandoc
-Recommends: libreoffice-nogui | libreoffice-core, unar, libheif-examples, libheif-plugin-x265, ghostscript, qpdf, file, fonts-inter, python3-nautilus
+Recommends: libreoffice-nogui | libreoffice-core, unar, libheif-examples, libheif-plugin-x265, libheif-plugin-aomenc, libheif-plugin-libde265, ghostscript, qpdf, file, fonts-inter, python3-nautilus
 Homepage: https://github.com/anmolxlight/satsuma
 Description: zero-click offline file converter
  Drop a file on a radial wheel and pick a slice: Satsuma converts images,

@@ -1,9 +1,11 @@
 """What a file is and what it can become."""
+import base64
 import mimetypes
 import os
 import shutil
 import subprocess
-from functools import lru_cache
+import tempfile
+from functools import cache, lru_cache
 from pathlib import Path
 
 ALIAS = {"jpeg": "jpg", "jpe": "jpg", "tif": "tiff", "aif": "aiff", "aifc": "aiff", "heif": "heic", "htm": "html",
@@ -55,7 +57,7 @@ def _sniff(path):
         return ""
     try:
         mime = subprocess.run(["file", "--mime-type", "-b", path], capture_output=True, text=True,
-                              timeout=5).stdout.strip()
+                              timeout=5, check=False).stdout.strip()
     except (OSError, subprocess.TimeoutExpired):
         return ""
     e = MIME_EXT.get(mime) or (mimetypes.guess_extension(mime) or "")
@@ -79,7 +81,9 @@ def kind(path):
 def needs(k, src, out):
     """Binaries required to turn a `src`-format file of kind `k` into `out`."""
     if k == "image":
-        return ("convert", "heif-enc") if out == "heic" else ("convert",)
+        dec = (f"{src.upper()} decoder",) if src in ("avif", "heic") else ()
+        enc = {"heic": ("heif-enc", "HEIC encoder"), "avif": ("AVIF encoder",)}.get(out, ())
+        return ("convert", *dec, *enc)
     if k in ("audio", "video"):
         return ("convert",) if out in GIF_FRAME_OUT else ("ffmpeg",)
     if k == "sub":
@@ -119,7 +123,49 @@ def all_options(path):
 
 
 def missing(tools):
-    return [t for t in tools if not shutil.which(t)]
+    return [t for t in tools if not (codec_works(t) if t in CODECS else shutil.which(t))]
+
+
+# ImageMagick lists AVIF/HEIC as read+write whenever it links libheif, but the codecs are separate libheif
+# plugins (aomenc, libde265, x265...). So probe for real: encode a pixel, decode these 1x1 samples.
+CODECS = ("AVIF encoder", "AVIF decoder", "HEIC encoder", "HEIC decoder")
+_PROBE = {
+    "avif": "AAAAHGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZgAAAOptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABwaWN0AAAAAAAAAAAAAAAAAAAA"
+            "AA5waXRtAAAAAAABAAAAImlsb2MAAAAAREAAAQABAAAAAAEOAAEAAAAAAAAAHwAAACNpaW5mAAAAAAABAAAAFWluZmUCAAAAAAEA"
+            "AGF2MDEAAAAAamlwcnAAAABLaXBjbwAAABNjb2xybmNseAABAA0ABoAAAAAMYXYxQ4FAbAAAAAAUaXNwZQAAAAAAAAABAAAAAQAA"
+            "ABBwaXhpAAAAAAMMDAwAAAAXaXBtYQAAAAAAAAABAAEEAYIDBAAAACdtZGF0EgAKCFgABjQENBuEMhEYAA4444QAALASvbjm8/e/"
+            "7A==",
+    "heic": "AAAAGGZ0eXBoZWljAAAAAG1pZjFoZWljAAABfW1ldGEAAAAAAAAAIWhkbHIAAAAAAAAAAHBpY3QAAAAAAAAAAAAAAAAAAAAADnBp"
+            "dG0AAAAAAAEAAAAiaWxvYwAAAABEQAABAAEAAAAAAZ0AAQAAAAAAAAAzAAAAI2lpbmYAAAAAAAEAAAAVaW5mZQIAAAAAAQAAaHZj"
+            "MQAAAAD9aXBycAAAAN1pcGNvAAAAdmh2Y0MBA3AAAAAAAAAAAAAe8AD8/fj4AAAPAyAAAQAYQAEMAf//A3AAAAMAkAAAAwAAAwAe"
+            "ugJAIQABACpCAQEDcAAAAwCQAAADAAADAB6gIIEFluqumubgIaDAgAAAAwCAAAADAIQiAAEABkQBwXPBiQAAABRpc3BlAAAAAAAA"
+            "AEAAAABAAAAAKGNsYXAAAAABAAAAAQAAAAEAAAAB////wQAAAAL////BAAAAAgAAABNjb2xybmNseAABAA0ABoAAAAAQcGl4aQAA"
+            "AAADCAgIAAAAGGlwbWEAAAAAAAAAAQABBYECgwQFAAAAO21kYXQAAAAvKAGvEyFkY0D1JyL2f2VCf/pNcn/IvZYWdyugwVvy+sD2"
+            "ZJvA86qRnoCHaacwFXg=",
+}
+
+
+@cache
+def codec_works(name):
+    """True if the "AVIF encoder" / "HEIC decoder" / ... really works. HEIC is written by heif-enc, the rest by convert."""
+    fmt, role = name.lower().split()
+    if missing(("convert", "heif-enc") if name == "HEIC encoder" else ("convert",)):
+        return False
+    with tempfile.TemporaryDirectory() as td:
+        img, png = os.path.join(td, f"x.{fmt}"), os.path.join(td, "x.png")
+        if role == "decoder":
+            Path(img).write_bytes(base64.b64decode(_PROBE[fmt]))
+            cmds, out = [["convert", img, png]], png
+        else:
+            cmds = [["convert", "-size", "8x8", "xc:orange", png],
+                    ["heif-enc", "-o", img, png] if fmt == "heic" else ["convert", png, img]]
+            out = img
+        try:
+            ok = all(subprocess.run(c, capture_output=True, timeout=20, check=False).returncode == 0 for c in cmds)
+        except (OSError, subprocess.TimeoutExpired):
+            return False
+        head = Path(out).read_bytes()[:12] if ok and os.path.exists(out) else b""
+    return head[4:] == b"ftyp" + fmt.encode() if role == "encoder" else head.startswith(b"\x89PNG")
 
 
 def options(path):
@@ -158,6 +204,10 @@ PACKAGES = {
     "ffmpeg": ("ffmpeg", "ffmpeg", "ffmpeg"),
     "convert": ("imagemagick", "ImageMagick", "imagemagick"),
     "heif-enc": ("libheif-examples", "libheif-tools", "libheif"),
+    "AVIF encoder": ("libheif-plugin-aomenc", "libheif", "aom"),
+    "AVIF decoder": ("libheif-plugin-dav1d", "libheif", "dav1d"),
+    "HEIC encoder": ("libheif-plugin-x265", "libheif-freeworld", "x265"),
+    "HEIC decoder": ("libheif-plugin-libde265", "libheif-freeworld", "libde265"),
     "pdftoppm": ("poppler-utils", "poppler-utils", "poppler"),
     "pdftotext": ("poppler-utils", "poppler-utils", "poppler"),
     "pdftohtml": ("poppler-utils", "poppler-utils", "poppler"),

@@ -36,16 +36,16 @@ def sh(*c, **kw):
 def case(name, needs=()):
     """Decorator: run now, record pass/fail/skip, keep going."""
     def wrap(fn):
-        gone = [t for t in needs if not shutil.which(t)]
+        gone = formats.missing(needs)  # binaries, and codecs probed for real (formats.CODECS)
         if gone:
             SKIPPED.append(name)
-            print(f"SKIP {name}: {', '.join(gone)} not installed")
+            print(f"SKIP {name}: {', '.join(gone)} not installed ({', '.join(formats.PACKAGES.get(t, (t,))[0] for t in gone)})")
             return fn
         try:
             fn()
             PASSED.append(name)
             print(f"ok   {name}")
-        except Exception:
+        except Exception:  # noqa: BLE001 - the runner records any failure and keeps going
             FAILED.append(name)
             print(f"FAIL {name}\n{traceback.format_exc()}")
         return fn
@@ -114,7 +114,6 @@ sh("convert", "-size", "64x48", "gradient:orange-black", D / "a.png")
 sh("convert", "-size", "40x40", "xc:skyblue", D / "b.jpg")
 (D / "s.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">'
                          '<circle cx="16" cy="16" r="14" fill="#FD5400"/></svg>')
-sh("heif-enc", "-o", D / "h.heic", D / "a.png")
 sh("ffmpeg", "-f", "lavfi", "-i", "sine=f=440:d=2", D / "s.wav")
 sh("ffmpeg", "-f", "lavfi", "-i", "sine=f=330:d=1", D / "t.mp3")
 sh("ffmpeg", "-f", "lavfi", "-i", "testsrc=d=3:s=160x120:r=25", "-f", "lavfi", "-i", "sine=d=3", "-shortest",
@@ -205,17 +204,17 @@ def _():
 # ---------------------------------------------------------------- conversions
 @case("images", needs=("convert",))
 def _():
-    for to in ("jpg", "webp", "tiff", "gif", "pdf", "ico", "avif"):
+    for to in ("jpg", "webp", "tiff", "gif", "pdf", "ico"):
         valid(conv("a.png", to), to)
     valid(conv("s.svg", "png"), "png")
     valid(conv("b.jpg", "png"), "png")
     valid(conv("anim.gif", "png"), "png")
 
 
-@case("images: HEIC in and out", needs=("heif-enc",))
+@case("images: HEIC and AVIF in and out", needs=formats.CODECS)
 def _():
-    valid(conv("a.png", "heic"), "heic")
-    valid(conv("h.heic", "jpg"), "jpg")
+    valid(conv(valid(conv("a.png", "heic"), "heic"), "jpg"), "jpg")
+    valid(conv(valid(conv("a.png", "avif"), "avif"), "png"), "png")
 
 
 @case("audio", needs=("ffmpeg",))
@@ -372,7 +371,7 @@ def _():
 @case("encrypt + decrypt pdf", needs=("qpdf",))
 def _():
     enc = tool("encrypt", "two.pdf", password="s3cret pass")
-    assert subprocess.run(["qpdf", "--requires-password", enc]).returncode == 0  # 0 = password required
+    assert subprocess.run(["qpdf", "--requires-password", enc], check=False).returncode == 0  # 0 = password required
     try:
         tools.apply(tools.BY_ID["decrypt"], [enc], {"password": "wrong"})
     except jobs.SatsumaError as e:
@@ -380,7 +379,7 @@ def _():
     else:
         raise AssertionError("wrong password accepted")
     dec = tools.apply(tools.BY_ID["decrypt"], [enc], {"password": "s3cret pass"})[0]
-    assert subprocess.run(["qpdf", "--requires-password", dec]).returncode == 2  # 2 = not encrypted
+    assert subprocess.run(["qpdf", "--requires-password", dec], check=False).returncode == 2  # 2 = not encrypted
     assert pages(dec) == 2
 
 
@@ -424,7 +423,7 @@ def _():
 def gi_python():
     for py in (sys.executable, "/usr/bin/python3"):
         if subprocess.run([py, "-c", "import gi; gi.require_version('Gtk', '4.0'); from gi.repository import Gtk"],
-                          capture_output=True).returncode == 0:
+                          capture_output=True, check=False).returncode == 0:
             return py
     return None
 
@@ -451,7 +450,7 @@ def _():
                    PYTHONPATH=str(ROOT))
         for args in ([], [str(D / "a.png")], ["--popup", str(D / "v.mp4"), str(D / "w.mp4")], ["--selection"]):
             t = time.time()
-            r = subprocess.run([py, "-m", "satsuma", *args], env=env, capture_output=True, text=True, timeout=5)
+            r = subprocess.run([py, "-m", "satsuma", *args], env=env, capture_output=True, text=True, timeout=5, check=False)
             assert r.returncode == 0, (args, r.stderr[-2000:])
             assert "Traceback" not in r.stderr and "CRITICAL" not in r.stderr, r.stderr[-2000:]
             assert time.time() - t < 5

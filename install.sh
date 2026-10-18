@@ -19,7 +19,8 @@ USER_HOME=$(getent passwd "$USER_NAME" | cut -d: -f6)
 if [ "$(id -u)" -eq 0 ]; then
   if command -v apt-get >/dev/null; then
     apt-get install -y python3 python3-gi python3-gi-cairo gir1.2-gtk-4.0 ffmpeg imagemagick poppler-utils pandoc \
-      libreoffice-nogui unar libheif-examples ghostscript qpdf file || true
+      libreoffice-nogui unar libheif-examples libheif-plugin-x265 libheif-plugin-aomenc libheif-plugin-libde265 \
+      ghostscript qpdf file || true
   elif command -v dnf >/dev/null; then
     dnf install -y python3 python3-gobject gtk4 ffmpeg-free ImageMagick poppler-utils pandoc libreoffice-core \
       libreoffice-writer libreoffice-calc libreoffice-impress unar libheif-tools ghostscript qpdf file || true

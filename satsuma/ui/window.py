@@ -753,7 +753,7 @@ def preview_png(path):
            "video": ["ffmpeg", "-y", "-loglevel", "error", "-ss", "0.5", "-i", path, "-frames:v", "1",
                      "-vf", "scale='min(640,iw)':-2", out],
            "pdf": ["pdftoppm", "-png", "-r", "60", "-singlefile", "-f", "1", "-l", "1", path, out[:-4]]}.get(k)
-    if cmd and subprocess.run(cmd, capture_output=True).returncode == 0 and os.path.exists(out):
+    if cmd and subprocess.run(cmd, capture_output=True, check=False).returncode == 0 and os.path.exists(out):
         return out
     return None
 
